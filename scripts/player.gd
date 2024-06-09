@@ -1,11 +1,13 @@
 extends CharacterBody3D;
 
 @onready var camera_mount = $camera_mount
+@onready var visuals = $visuals
 @onready var animation_player = $visuals/model/AnimationPlayer
+
 
 const SPEED = 4.48;
 @export var JUMP_VELOCITY = 14;
-
+@export var shift_lock = true;
 @export var sens_horizontal = 0.2;
 @export var sens_vertical = 0.2;
 
@@ -34,9 +36,15 @@ func _physics_process(delta):
 	var input_dir = Input.get_vector("left", "right", "forward", "backward");
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized();
 	if direction:
+		if animation_player.current_animation != "walk":
+			animation_player.play("walk");
 		velocity.x = direction.x * SPEED;
 		velocity.z = direction.z * SPEED;
+		if !shift_lock:
+			visuals.look_at(position + direction);
 	else:
+		if animation_player.current_animation != "idle":
+			animation_player.play("idle");
 		velocity.x = move_toward(velocity.x, 0, SPEED);
 		velocity.z = move_toward(velocity.z, 0, SPEED);
 
