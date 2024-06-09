@@ -3,6 +3,9 @@
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_jj5x1"]
 [ext_resource type="Texture2D" uid="uid://d2wq2ineotfdx" path="res://assets/player/roblox noob_Noobkingpotato1Tex.png" id="2_wc0s6"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_on6um"]
+size = Vector3(0.58, 1.23, 0.305)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6nrxx"]
 resource_name = "Noobkingpotato1Mtl.001"
 cull_mode = 2
@@ -240,7 +243,7 @@ tracks/3/enabled = true
 tracks/3/path = NodePath("Armature/Skeleton3D:Arm.r")
 tracks/3/interp = 2
 tracks/3/loop_wrap = true
-tracks/3/keys = PackedFloat32Array(0, 1, 0, 0, -1, 0.017, 0.12, 1, -0.007, -0.383, -0.924, 0.016, 0.3, 1, 0.001, 0.001, -1, 0.017, 0.42, 1, 0.005, 0.259, -0.966, 0.017)
+tracks/3/keys = PackedFloat32Array(0, 1, -1.03316e-07, 0, 1, 0, 0.12, 1, 0, 0.383, 0.924, 0, 0.3, 1, 0.000474975, 0.000474975, -0.999525, 0.000474975, 0.42, 1, 0, 0.259, -0.966, 0)
 tracks/4/type = "position_3d"
 tracks/4/imported = false
 tracks/4/enabled = true
@@ -254,14 +257,14 @@ tracks/5/enabled = true
 tracks/5/path = NodePath("Armature/Skeleton3D:Arm.l")
 tracks/5/interp = 2
 tracks/5/loop_wrap = true
-tracks/5/keys = PackedFloat32Array(0, 1, 0.000474975, 0.000474975, 0.999475, 0.017475, 0.12, 1, 0.005, -0.259, 0.966, 0.017, 0.24, 1, 0.001, 0.001, 1, 0.017, 0.42, 1, -0.007, 0.383, 0.924, 0.016)
+tracks/5/keys = PackedFloat32Array(0, 1, -1.03316e-07, 0, 1, 0, 0.12, 1, 0.001, -0.259, 0.966, 0.001, 0.24, 1, 0.000474975, 0.000474975, 1.00048, 0.000474975, 0.42, 1, 0.000474975, -0.382525, -0.923525, 0.000474975)
 tracks/6/type = "position_3d"
 tracks/6/imported = false
 tracks/6/enabled = true
 tracks/6/path = NodePath("Armature/Skeleton3D:Leg.r")
 tracks/6/interp = 2
 tracks/6/loop_wrap = true
-tracks/6/keys = PackedFloat32Array(0, 1, 0.6, 1.78471, -2.56824e-07, 0.15, 1, 0.600475, 1.73548, -0.144525, 0.33, 1, 0.600475, 1.78448, 0.000474975, 0.42, 1, 0.600475, 1.89948, 0.065475)
+tracks/6/keys = PackedFloat32Array(0, 1, 0.6, 1.78471, -2.56824e-07, 0.15, 1, 0.6, 1.54, 0, 0.33, 1, 0.600475, 1.78448, 0.000474975, 0.42, 1, 0.600475, 1.60948, 0.000474975)
 tracks/7/type = "rotation_3d"
 tracks/7/imported = false
 tracks/7/enabled = true
@@ -275,7 +278,7 @@ tracks/8/enabled = true
 tracks/8/path = NodePath("Armature/Skeleton3D:Leg.l")
 tracks/8/interp = 2
 tracks/8/loop_wrap = true
-tracks/8/keys = PackedFloat32Array(0, 1, -0.6, 1.624, 0, 0.12, 1, -0.599525, 1.72548, 0.180475, 0.24, 1, -0.599525, 1.62448, 0.000474975, 0.42, 1, -0.599525, 1.72248, -0.254525, 0.51, 1, -0.6, 1.624, 0)
+tracks/8/keys = PackedFloat32Array(0, 1, -0.6, 1.78471, -4.38019e-07, 0.12, 1, -0.599525, 1.57548, 0.000474975, 0.24, 1, -0.599525, 1.78448, 0.000474975, 0.42, 1, -0.599525, 1.52248, 0.000474975, 0.51, 1, -0.6, 1.78471, -4.38015e-07)
 tracks/9/type = "rotation_3d"
 tracks/9/imported = false
 tracks/9/enabled = true
@@ -294,9 +297,9 @@ tracks/11/type = "rotation_3d"
 tracks/11/imported = false
 tracks/11/enabled = true
 tracks/11/path = NodePath("Armature/Skeleton3D:Base")
-tracks/11/interp = 2
+tracks/11/interp = 1
 tracks/11/loop_wrap = true
-tracks/11/keys = PackedFloat32Array(0, 1, 0, -1, 0, 7.54979e-08, 0.12, 1, 0.000474975, 0.999475, 0.000474975, 0.017475, 0.42, 1, 0.000474975, -0.999525, 0.000474975, 0.017475)
+tracks/11/keys = PackedFloat32Array(0, 1, 0, -1, 0, 7.54979e-08)
 tracks/12/type = "position_3d"
 tracks/12/imported = false
 tracks/12/enabled = true
@@ -319,12 +322,13 @@ _data = {
 "walk": SubResource("Animation_yarj7")
 }
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_on6um"]
-size = Vector3(0.58, 1.23193, 0.305)
-
 [node name="player" type="CharacterBody3D"]
 transform = Transform3D(0.999993, -0.00376946, -0.000513207, 0.0037695, 0.999993, 6.48258e-05, 0.00051296, -6.67528e-05, 1, 0, 0, 0)
 script = ExtResource("1_jj5x1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.895, 1.01888e-09, 4.94765e-10, -1.77837e-09, 0.895, -1.45519e-11, -3.7835e-10, 0, 0.895, -0.000236458, 0.558032, 0.0162304)
+shape = SubResource("BoxShape3D_on6um")
 
 [node name="visuals" type="Node3D" parent="."]
 
@@ -335,7 +339,7 @@ transform = Transform3D(0.28, -4.15463e-11, 7.27596e-11, 5.39504e-10, 0.28, -9.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2.1, 0)
 
 [node name="Skeleton3D" type="Skeleton3D" parent="visuals/model/Armature"]
-transform = Transform3D(0.999999, 0.00052804, 0.000219276, -0.000528141, 1, 0.00045867, -0.000219007, -0.000458799, 1, 0, 0, 0)
+transform = Transform3D(0.999999, 0.00052804, 0.000219276, -0.000528142, 1, 0.00045867, -0.000219007, -0.000458799, 1, 0, 0, 0)
 bones/0/name = "Base"
 bones/0/parent = -1
 bones/0/rest = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, -2.13246, -3.47421e-07)
@@ -386,7 +390,7 @@ bones/6/position = Vector3(-1.6, 1.7201, -1.5067e-07)
 bones/6/rotation = Quaternion(-1.03316e-07, 0, 1, 0)
 bones/6/scale = Vector3(1, 1, 1)
 
-[node name="mesh" type="MeshInstance3D" parent="visuals/model/Armature/Skeleton3D"]
+[node name="Noobkingpotato6" type="MeshInstance3D" parent="visuals/model/Armature/Skeleton3D"]
 transform = Transform3D(1, -4.54747e-11, -5.82077e-11, -2.90129e-10, 1, -1.16415e-10, 5.82077e-11, -1.16415e-10, 1, 0, 0, 0)
 mesh = SubResource("ArrayMesh_1300x")
 skin = SubResource("Skin_w3vde")
@@ -395,13 +399,10 @@ skin = SubResource("Skin_w3vde")
 libraries = {
 "": SubResource("AnimationLibrary_qlmw4")
 }
+blend_times = [&"walk", &"idle", 0.2, &"walk", &"walk", 0.5]
 
 [node name="camera_mount" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.39793, 0)
 
 [node name="Camera3D" type="Camera3D" parent="camera_mount"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.476, 0.026, 2)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(0.895, 1.01888e-09, 2.06346e-08, -1.17727e-07, 0.895, -1.32422e-09, -1.52504e-08, 3.63798e-12, 0.895, -0.000236457, 0.55322, 0.0162304)
-shape = SubResource("BoxShape3D_on6um")

@@ -10,10 +10,17 @@ config_version=5
 
 [application]
 
-config/name="rolos"
+config/name="Rolos"
+config/description="A free as in freedom and open source clone of Roblox purpose built for the obby community and everything that elite level obbying entails"
+config/version="Prealpha 0.1"
 run/main_scene="res://scenes/world.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
+boot_splash/show_image=false
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/borderless=true
 
 [dotnet]
 

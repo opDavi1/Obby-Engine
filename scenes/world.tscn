@@ -51,4 +51,5 @@ use_collision = true
 material = SubResource("StandardMaterial3D_ia8vu")
 
 [node name="player" parent="." instance=ExtResource("1_gxtfo")]
+transform = Transform3D(0.999993, -0.00376946, -0.000513207, 0.0037695, 0.999993, 6.48258e-05, 0.00051296, -6.67528e-05, 1, 0, -0.495304, 0)
 JUMP_VELOCITY = 17
