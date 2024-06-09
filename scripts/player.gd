@@ -3,11 +3,11 @@ extends CharacterBody3D;
 @onready var camera_mount = $camera_mount
 @onready var animation_player = $visuals/model/AnimationPlayer
 
-const SPEED = 5.0;
-const JUMP_VELOCITY = 4.5;
+const SPEED = 4.48;
+@export var JUMP_VELOCITY = 14;
 
-@export var sens_horizontal = 0.5;
-@export var sens_vertical = 0.5;
+@export var sens_horizontal = 0.2;
+@export var sens_vertical = 0.2;
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity");

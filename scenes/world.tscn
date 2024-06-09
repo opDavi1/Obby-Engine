@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c5xkbrtdu6hwg"]
+[gd_scene load_steps=7 format=3 uid="uid://c5xkbrtdu6hwg"]
 
 [ext_resource type="PackedScene" uid="uid://6stay31pb452" path="res://scenes/player.tscn" id="1_gxtfo"]
 
@@ -17,6 +17,12 @@ sdfgi_enabled = true
 glow_enabled = true
 fog_enabled = true
 fog_density = 0.005
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sto8f"]
+albedo_color = Color(1, 0.00392157, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ia8vu"]
+albedo_color = Color(0, 0, 1, 1)
 
 [node name="world" type="Node3D"]
 
@@ -37,11 +43,12 @@ size = Vector3(1000, 1, 1000)
 [node name="box" type="CSGBox3D" parent="map"]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -5.82447, 1.49245, 3.66395)
 use_collision = true
+material = SubResource("StandardMaterial3D_sto8f")
 
 [node name="box2" type="CSGBox3D" parent="map"]
 transform = Transform3D(1.79194, 0, 0.888238, 0, 2, 0, -0.888238, 0, 1.79194, 1.98898, 0.492454, -2.41224)
 use_collision = true
+material = SubResource("StandardMaterial3D_ia8vu")
 
 [node name="player" parent="." instance=ExtResource("1_gxtfo")]
-sens_horizontal = 0.2
-sens_vertical = 0.2
+JUMP_VELOCITY = 17

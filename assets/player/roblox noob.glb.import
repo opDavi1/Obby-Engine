@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cxwo3tspvkonl"
-path="res://.godot/imported/roblox_r6_rigged.glb-dd69936dddc8c22b577dad8d1c9ad723.scn"
+uid="uid://egdcb1a1aij1"
+path="res://.godot/imported/roblox noob.glb-b27264fef5fbb76be710a13cedb3317a.scn"
 
 [deps]
 
-source_file="res://assets/player/roblox_r6_rigged.glb"
-dest_files=["res://.godot/imported/roblox_r6_rigged.glb-dd69936dddc8c22b577dad8d1c9ad723.scn"]
+source_file="res://assets/player/roblox noob.glb"
+dest_files=["res://.godot/imported/roblox noob.glb-b27264fef5fbb76be710a13cedb3317a.scn"]
 
 [params]
 
