@@ -5,31 +5,44 @@ extends CharacterBody3D;
 @onready var animation_player = $visuals/model/AnimationPlayer
 
 
-const SPEED = 4.48;
-@export var JUMP_VELOCITY = 14;
-@export var shift_lock = true;
-@export var sens_horizontal = 0.2;
-@export var sens_vertical = 0.2;
+@export var sensitivity = 0.2;
 
-# Get the gravity from the project settings to be synced with RigidBody nodes.
+
+var jumpGraceTimer = 0;
+const JUMP_GRACE_TIME = 0.1; #seconds
+var JUMP_VELOCITY = 14;
+var SPEED = 4.48;
+var shift_lock = true;
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity");
+
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;
 
 func _input(event):
 	if event is InputEventMouseMotion:
-		rotate_y(deg_to_rad(-event.relative.x * sens_horizontal));
-		camera_mount.rotate_x(deg_to_rad(-event.relative.y * sens_horizontal));
-
+		rotate_y(deg_to_rad(-event.relative.x * sensitivity));
+		camera_mount.rotate_x(deg_to_rad(-event.relative.y * sensitivity));
+		camera_mount.rotation.x = clamp(camera_mount.rotation.x, deg_to_rad(-90), deg_to_rad(45));
+		
+func jump():
+	velocity.y = JUMP_VELOCITY;
+	jumpGraceTimer = 0;
+	
 func _physics_process(delta):
+
 	# Add the gravity.
 	if not is_on_floor():
-		velocity.y -= gravity * delta;
+		velocity.y -= gravity * delta; 
+		jumpGraceTimer -= delta;
+		
+	if is_on_floor():
+		jumpGraceTimer = JUMP_GRACE_TIME;
 
 	# Handle jump.
-	if Input.is_action_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY;
+	if Input.is_action_pressed("ui_accept") and jumpGraceTimer > 0:
+		jump();
+	
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.

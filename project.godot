@@ -15,12 +15,9 @@ config/description="A free as in freedom and open source clone of Roblox purpose
 config/version="Prealpha 0.1"
 run/main_scene="res://scenes/world.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
+run/max_fps=500
 boot_splash/show_image=false
 config/icon="res://icon.svg"
-
-[display]
-
-window/size/borderless=true
 
 [dotnet]
 

@@ -41,15 +41,27 @@ use_collision = true
 size = Vector3(1000, 1, 1000)
 
 [node name="box" type="CSGBox3D" parent="map"]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -5.82447, 1.49245, 3.66395)
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, -4.38428, 1.49245, -7.22922)
 use_collision = true
+size = Vector3(1, 1, 0.0750122)
+material = SubResource("StandardMaterial3D_sto8f")
+
+[node name="box4" type="CSGBox3D" parent="map"]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 2.14852, 1.49245, -7.22574)
+use_collision = true
+size = Vector3(1, 1, 0.0752258)
+material = SubResource("StandardMaterial3D_sto8f")
+
+[node name="box3" type="CSGBox3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.11259, 4.49245, -7.22113)
+use_collision = true
+size = Vector3(2.52, 10, 0.28)
 material = SubResource("StandardMaterial3D_sto8f")
 
 [node name="box2" type="CSGBox3D" parent="map"]
-transform = Transform3D(1.79194, 0, 0.888238, 0, 2, 0, -0.888238, 0, 1.79194, 1.98898, 0.492454, -2.41224)
+transform = Transform3D(1.79194, 0, 0.888238, 0, 2, 0, -0.888238, 0, 1.79194, 2.17783, 0.492454, -3.24443)
 use_collision = true
 material = SubResource("StandardMaterial3D_ia8vu")
 
 [node name="player" parent="." instance=ExtResource("1_gxtfo")]
-transform = Transform3D(0.999993, -0.00376946, -0.000513207, 0.0037695, 0.999993, 6.48258e-05, 0.00051296, -6.67528e-05, 1, 0, -0.495304, 0)
-JUMP_VELOCITY = 17
+transform = Transform3D(0.999993, -0.00376946, -0.000513207, 0.0037695, 0.999993, 6.48258e-05, 0.00051296, -6.67528e-05, 1, -4.41225, 3.5047, -7.26536)

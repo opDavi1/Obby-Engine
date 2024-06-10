@@ -113,21 +113,21 @@ tracks/0/type = "position_3d"
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/path = NodePath("Armature/Skeleton3D:Head")
-tracks/0/interp = 1
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = PackedFloat32Array(0, 1, 5.268e-14, 2.12008, -1.07932e-08)
 tracks/1/type = "rotation_3d"
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/path = NodePath("Armature/Skeleton3D:Head")
-tracks/1/interp = 1
+tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = PackedFloat32Array(0, 1, 0, -3.55271e-15, 0, 1)
 tracks/2/type = "position_3d"
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/path = NodePath("Armature/Skeleton3D:Arm.r")
-tracks/2/interp = 1
+tracks/2/interp = 2
 tracks/2/loop_wrap = true
 tracks/2/keys = PackedFloat32Array(0, 1, 1.6, 1.7201, 1.29083e-07)
 tracks/3/type = "rotation_3d"
@@ -141,7 +141,7 @@ tracks/4/type = "position_3d"
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/path = NodePath("Armature/Skeleton3D:Arm.l")
-tracks/4/interp = 1
+tracks/4/interp = 2
 tracks/4/loop_wrap = true
 tracks/4/keys = PackedFloat32Array(0, 1, -1.6, 1.7201, -1.5067e-07)
 tracks/5/type = "rotation_3d"
@@ -183,28 +183,28 @@ tracks/10/type = "position_3d"
 tracks/10/imported = false
 tracks/10/enabled = true
 tracks/10/path = NodePath("Armature/Skeleton3D:Base")
-tracks/10/interp = 1
+tracks/10/interp = 2
 tracks/10/loop_wrap = true
 tracks/10/keys = PackedFloat32Array(0, 1, 0, -2.13246, -3.47421e-07)
 tracks/11/type = "rotation_3d"
 tracks/11/imported = false
 tracks/11/enabled = true
 tracks/11/path = NodePath("Armature/Skeleton3D:Base")
-tracks/11/interp = 1
+tracks/11/interp = 2
 tracks/11/loop_wrap = true
 tracks/11/keys = PackedFloat32Array(0, 1, 0, -1, 0, 7.54979e-08)
 tracks/12/type = "position_3d"
 tracks/12/imported = false
 tracks/12/enabled = true
 tracks/12/path = NodePath("Armature/Skeleton3D:Torso")
-tracks/12/interp = 1
+tracks/12/interp = 2
 tracks/12/loop_wrap = true
 tracks/12/keys = PackedFloat32Array(0, 1, 5.08294e-14, 2.11238, -3.36628e-07)
 tracks/13/type = "rotation_3d"
 tracks/13/imported = false
 tracks/13/enabled = true
 tracks/13/path = NodePath("Armature/Skeleton3D:Torso")
-tracks/13/interp = 1
+tracks/13/interp = 2
 tracks/13/loop_wrap = true
 tracks/13/keys = PackedFloat32Array(0, 1, 0, -3.17865e-08, 0, 1)
 
@@ -320,7 +320,7 @@ _data = {
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_on6um"]
-size = Vector3(0.58, 1.23193, 0.305)
+size = Vector3(0.628887, 1.23193, 0.313271)
 
 [node name="player" type="CharacterBody3D"]
 transform = Transform3D(0.999993, -0.00376946, -0.000513207, 0.0037695, 0.999993, 6.48258e-05, 0.00051296, -6.67528e-05, 1, 0, 0, 0)
@@ -335,7 +335,7 @@ transform = Transform3D(0.28, -4.15463e-11, 7.27596e-11, 5.39504e-10, 0.28, -9.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2.1, 0)
 
 [node name="Skeleton3D" type="Skeleton3D" parent="visuals/model/Armature"]
-transform = Transform3D(0.999999, 0.00052804, 0.000219276, -0.000528141, 1, 0.00045867, -0.000219007, -0.000458799, 1, 0, 0, 0)
+transform = Transform3D(0.999999, 0.00052804, 0.000219276, -0.00052814, 1, 0.00045867, -0.000219007, -0.000458799, 1, 0, 0, 0)
 bones/0/name = "Base"
 bones/0/parent = -1
 bones/0/rest = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, -2.13246, -3.47421e-07)
@@ -376,14 +376,14 @@ bones/5/parent = 3
 bones/5/rest = Transform3D(-1, 0, -2.06632e-07, 0, -1, 0, -2.06632e-07, 0, 1, 1.6, 1.7201, 1.29083e-07)
 bones/5/enabled = true
 bones/5/position = Vector3(1.6, 1.7201, 1.29083e-07)
-bones/5/rotation = Quaternion(-1.03316e-07, 0, 1, 0)
+bones/5/rotation = Quaternion(0, 0, 0.999856, -0.0169975)
 bones/5/scale = Vector3(1, 1, 1)
 bones/6/name = "Arm.l"
 bones/6/parent = 3
 bones/6/rest = Transform3D(-1, 0, -2.06632e-07, 0, -1, 0, -2.06632e-07, 0, 1, -1.6, 1.7201, -1.5067e-07)
 bones/6/enabled = true
 bones/6/position = Vector3(-1.6, 1.7201, -1.5067e-07)
-bones/6/rotation = Quaternion(-1.03316e-07, 0, 1, 0)
+bones/6/rotation = Quaternion(0.000475152, 0.000475152, 0.999847, 0.0174815)
 bones/6/scale = Vector3(1, 1, 1)
 
 [node name="mesh" type="MeshInstance3D" parent="visuals/model/Armature/Skeleton3D"]
@@ -395,13 +395,18 @@ skin = SubResource("Skin_w3vde")
 libraries = {
 "": SubResource("AnimationLibrary_qlmw4")
 }
+blend_times = [&"idle", &"idle", 0.2, &"idle", &"walk", 0.2, &"walk", &"idle", 0.1, &"walk", &"walk", 0.5]
 
 [node name="camera_mount" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.39793, 0)
+transform = Transform3D(1, -1.53335e-11, 1.74623e-10, -1.90212e-11, 1, 0, -1.74623e-10, 0, 1, -0.000338938, 1.30802, -5.82822e-06)
 
-[node name="Camera3D" type="Camera3D" parent="camera_mount"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.476, 0.026, 2)
+[node name="SpringArm3D" type="SpringArm3D" parent="camera_mount"]
+transform = Transform3D(1, -1.53193e-11, 2.32831e-10, -1.9007e-11, 1, 0, -2.32831e-10, 1.45519e-11, 1, 0.392811, -0.00148094, -0.000201595)
+spring_length = 2.76
+
+[node name="Camera3D" type="Camera3D" parent="camera_mount/SpringArm3D"]
+transform = Transform3D(1, -5.83601e-09, -9.31323e-10, -1.89928e-11, 1, -7.18865e-09, 0, 1.16415e-10, 1, 0.00478449, 0.0277238, 2.79326)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(0.895, 1.01888e-09, 2.06346e-08, -1.17727e-07, 0.895, -1.32422e-09, -1.52504e-08, 3.63798e-12, 0.895, -0.000236457, 0.55322, 0.0162304)
+transform = Transform3D(0.895, 1.01888e-09, 2.1595e-08, -1.22849e-07, 0.895, -1.41154e-09, -1.71713e-08, 3.63798e-12, 0.895, 0.00325091, 0.55322, 0.00746831)
 shape = SubResource("BoxShape3D_on6um")
