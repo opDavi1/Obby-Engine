@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://duq0gaqpov5na"]
+
+[ext_resource type="Texture2D" uid="uid://bbdvau8qmnffx" path="res://assets/studs.png" id="1_gkk2a"]
+
+[resource]
+albedo_color = Color(1, 0, 0, 1)
+albedo_texture = ExtResource("1_gkk2a")
+uv1_scale = Vector3(1.8, 1.8, 1.8)
+uv1_offset = Vector3(-0.445, -0.75, 0.25)
+uv1_triplanar = true
+uv1_world_triplanar = true

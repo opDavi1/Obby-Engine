@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://b37lqi8pypj0p"
+path="res://.godot/imported/limb.obj-fb1f15222e1b3ef7e181f90199a9eab8.mesh"
+
+[deps]
+
+files=["res://.godot/imported/limb.obj-fb1f15222e1b3ef7e181f90199a9eab8.mesh"]
+
+source_file="res://assets/player/limb.obj"
+dest_files=["res://.godot/imported/limb.obj-fb1f15222e1b3ef7e181f90199a9eab8.mesh", "res://.godot/imported/limb.obj-fb1f15222e1b3ef7e181f90199a9eab8.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

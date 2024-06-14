@@ -2,20 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d2wq2ineotfdx"
-path.s3tc="res://.godot/imported/roblox noob_Noobkingpotato1Tex.png-6665765cb4b0373dff21fec371ae55bd.s3tc.ctex"
+uid="uid://bbdvau8qmnffx"
+path.s3tc="res://.godot/imported/studs.png-e4faa88b6f4569a4b954fc77db8baa0d.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
-generator_parameters={
-"md5": "1429840bb56fccba63f4690522e970bf"
-}
 
 [deps]
 
-source_file="res://assets/player/roblox noob_Noobkingpotato1Tex.png"
-dest_files=["res://.godot/imported/roblox noob_Noobkingpotato1Tex.png-6665765cb4b0373dff21fec371ae55bd.s3tc.ctex"]
+source_file="res://assets/studs.png"
+dest_files=["res://.godot/imported/studs.png-e4faa88b6f4569a4b954fc77db8baa0d.s3tc.ctex"]
 
 [params]
 
