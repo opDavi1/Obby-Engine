@@ -3,13 +3,18 @@ extends CharacterBody3D;
 @onready var camera_mount = $camera_mount
 @onready var visuals = $visuals
 @onready var animation_player = $AnimationPlayer
+@onready var spring_arm_3d = $camera_mount/SpringArm3D
+@onready var camera = $camera_mount/SpringArm3D/Camera3D
 
 const JUMP_GRACE_TIME = 0.1; #seconds
 const JUMP_VELOCITY = 14;
 
 @export var sensitivity = 0.2;
+@export var speed = 4.48;
+@export var maxCameraZoom = 10;
+@export var minCameraZoom = 1;
+
 var jumpGraceTimer = 0;
-var speed = 4.48;
 var shiftLockEnabled = false;
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity");
 
@@ -48,6 +53,14 @@ func _input(event):
 			
 			camera_mount.rotation.x -= deg_to_rad(event.relative.y * sensitivity);
 			camera_mount.rotation.x = clamp(camera_mount.rotation.x, deg_to_rad(-89), deg_to_rad(80));
+			
+	if event is InputEventMouseButton:
+		if event.button_index == 4:
+			camera.position.z = clamp(camera.position.z - 0.5, minCameraZoom, maxCameraZoom);
+			spring_arm_3d.spring_length = clamp(spring_arm_3d.spring_length - 0.5, minCameraZoom, maxCameraZoom);
+		elif event.button_index == 5:
+			camera.position.z = clamp(camera.position.z + 0.5, minCameraZoom, maxCameraZoom);
+			spring_arm_3d.spring_length = clamp(spring_arm_3d.spring_length + 0.5, minCameraZoom, maxCameraZoom);
 
 func _process(_delta):
 	if Input.is_action_just_pressed("shiftLock"):
