@@ -425,4 +425,4 @@ shape = SubResource("CylinderShape3D_ce65w")
 libraries = {
 "": SubResource("AnimationLibrary_pjlua")
 }
-blend_times = [&"walk", &"idle", 0.2, &"walk", &"walk", 0.5]
+blend_times = [&"walk", &"walk", 0.5, &"walk", &"idle", 0.2]

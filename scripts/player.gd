@@ -32,10 +32,10 @@ func toggleShiftLock():
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE;
 	else:
 		shiftLockEnabled = true;
+		camera_mount.position.x = 0.43;
 		rotation.y = camera_mount.rotation.y;
 		camera_mount.rotation.y = 0;
 		visuals.rotation.y = 0
-		camera_mount.position.x = 0.43;
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;
 
 func _input(event):
