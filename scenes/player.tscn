@@ -414,7 +414,7 @@ spring_length = 1.67
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.60742)
 
 [node name="torso_collision" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00181735, -0.280292, -0.00363502)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.28, 0)
 shape = SubResource("BoxShape3D_x3dbt")
 
 [node name="head_collision" type="CollisionShape3D" parent="."]
@@ -425,4 +425,4 @@ shape = SubResource("CylinderShape3D_ce65w")
 libraries = {
 "": SubResource("AnimationLibrary_pjlua")
 }
-blend_times = [&"walk", &"walk", 0.5, &"walk", &"idle", 0.2]
+blend_times = [&"walk", &"idle", 0.2, &"walk", &"walk", 0.5]
