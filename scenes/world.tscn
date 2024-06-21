@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://c5xkbrtdu6hwg"]
+[gd_scene load_steps=10 format=3 uid="uid://c5xkbrtdu6hwg"]
 
 [ext_resource type="Texture2D" uid="uid://bbdvau8qmnffx" path="res://assets/studs.png" id="1_dd2fw"]
+[ext_resource type="Material" uid="uid://duq0gaqpov5na" path="res://assets/stud.tres" id="2_acbta"]
 [ext_resource type="PackedScene" uid="uid://wqpa6fntamuq" path="res://scenes/player.tscn" id="3_oa0ld"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lxmin"]
@@ -25,7 +26,7 @@ uv1_scale = Vector3(1.72, 1.72, 1.72)
 uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sto8f"]
-albedo_color = Color(1, 0.00392157, 0, 1)
+albedo_color = Color(0.366569, 0.562348, 0.684524, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ia8vu"]
 albedo_color = Color(0, 0, 1, 1)
@@ -48,19 +49,21 @@ size = Vector3(1000, 1, 1000)
 material = SubResource("StandardMaterial3D_fap5n")
 
 [node name="box3" type="CSGBox3D" parent="map"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.954, 2, -7.221)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.09581, 1.87392, -7.221)
 use_collision = true
-size = Vector3(3.08, 5, 0.28)
-material = SubResource("StandardMaterial3D_sto8f")
+size = Vector3(2.8, 4.76, 0.28)
+material = ExtResource("2_acbta")
 
 [node name="box4" type="CSGBox3D" parent="map"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.037, 0, -7.221)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.97724, 1.4, -7.221)
+material_override = ExtResource("2_acbta")
 use_collision = true
 size = Vector3(3.08, 1, 0.28)
 material = SubResource("StandardMaterial3D_sto8f")
 
 [node name="box5" type="CSGBox3D" parent="map"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.129, 0, -7.221)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.73335, 1.4, -7.221)
+material_override = ExtResource("2_acbta")
 use_collision = true
 size = Vector3(3.08, 1, 0.28)
 material = SubResource("StandardMaterial3D_sto8f")
@@ -71,4 +74,4 @@ use_collision = true
 material = SubResource("StandardMaterial3D_ia8vu")
 
 [node name="player" parent="." instance=ExtResource("3_oa0ld")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.682, 0.445, 0.057)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.73572, 2.89146, -7.19147)

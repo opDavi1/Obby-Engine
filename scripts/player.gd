@@ -7,6 +7,7 @@ extends CharacterBody3D
 @onready var camera = $camera_mount/SpringArm3D/Camera3D
 @onready var torso_collision = $torso_collision
 @onready var head_collision = $head_collision
+@onready var legs_collision = $legs_collision
 
 const JUMP_GRACE_TIME = 0.1 #seconds
 
@@ -32,6 +33,7 @@ func toggleShiftLock():
 		visuals.rotation.y = rotation.y
 		torso_collision.rotation.y = rotation.y
 		head_collision.rotation.y = rotation.y
+		legs_collision.rotation.y = rotation.y
 		rotation.y = 0
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	else:
@@ -42,6 +44,7 @@ func toggleShiftLock():
 		visuals.rotation.y = 0
 		torso_collision.rotation.y = 0
 		head_collision.rotation.y = 0
+		legs_collision.rotation.y = 0
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _input(event):
@@ -111,7 +114,7 @@ func _physics_process(delta):
 		velocity.x = direction.x * speed
 		velocity.z = direction.z * speed
 		if not shiftLockEnabled:
-			visuals.look_at(position + direction)
+			visuals.rotation.y = lerp_angle(visuals.rotation.y, atan2(-direction.x, -direction.z), 0.2);
 	else:
 		if animation_player.current_animation != "idle":
 			animation_player.play("idle")
