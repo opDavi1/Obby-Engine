@@ -5,16 +5,6 @@
 [ext_resource type="ArrayMesh" uid="uid://bj1lajn1lkffd" path="res://assets/player/torso.obj" id="3_icsia"]
 [ext_resource type="ArrayMesh" uid="uid://b37lqi8pypj0p" path="res://assets/player/limb.obj" id="4_fj1mx"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_x3dbt"]
-size = Vector3(0.555, 0.56, 0.27)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_rmr3g"]
-size = Vector3(0.555, 0.28, 0.27)
-
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_ce65w"]
-height = 0.33
-radius = 0.13
-
 [sub_resource type="Animation" id="Animation_6fxc3"]
 length = 0.001
 tracks/0/type = "value"
@@ -358,6 +348,16 @@ _data = {
 "walk": SubResource("Animation_55xd4")
 }
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_x3dbt"]
+size = Vector3(0.555, 0.56, 0.27)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rmr3g"]
+size = Vector3(0.555, 0.28, 0.27)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ce65w"]
+height = 0.33
+radius = 0.13
+
 [node name="player" type="CharacterBody3D"]
 script = ExtResource("1_xujqn")
 
@@ -416,6 +416,12 @@ spring_length = 1.67
 [node name="Camera3D" type="Camera3D" parent="camera_mount/SpringArm3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.60742)
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_pjlua")
+}
+blend_times = [&"walk", &"walk", 0.5, &"walk", &"idle", 0.2]
+
 [node name="torso_collision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00187874, 0)
 shape = SubResource("BoxShape3D_x3dbt")
@@ -427,9 +433,3 @@ shape = SubResource("BoxShape3D_rmr3g")
 [node name="head_collision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.442, 0)
 shape = SubResource("CylinderShape3D_ce65w")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_pjlua")
-}
-blend_times = [&"walk", &"idle", 0.2, &"walk", &"walk", 0.5]

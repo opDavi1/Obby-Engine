@@ -74,4 +74,4 @@ use_collision = true
 material = SubResource("StandardMaterial3D_ia8vu")
 
 [node name="player" parent="." instance=ExtResource("3_oa0ld")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.73572, 2.89146, -7.19147)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.42553, 2.81801, -3.63899)

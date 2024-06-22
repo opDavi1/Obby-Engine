@@ -8,6 +8,7 @@ extends CharacterBody3D
 @onready var torso_collision = $torso_collision
 @onready var head_collision = $head_collision
 @onready var legs_collision = $legs_collision
+@onready var playerModel = [visuals, torso_collision, head_collision, legs_collision]
 
 const JUMP_GRACE_TIME = 0.1 #seconds
 
@@ -30,10 +31,8 @@ func toggleShiftLock():
 		shiftLockEnabled = false
 		camera_mount.position.x = 0
 		camera_mount.rotation.y = rotation.y
-		visuals.rotation.y = rotation.y
-		torso_collision.rotation.y = rotation.y
-		head_collision.rotation.y = rotation.y
-		legs_collision.rotation.y = rotation.y
+		for part in playerModel:
+			part.rotation.y = rotation.y
 		rotation.y = 0
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	else:
@@ -41,51 +40,11 @@ func toggleShiftLock():
 		camera_mount.position.x = 0.43
 		rotation.y = camera_mount.rotation.y
 		camera_mount.rotation.y = 0
-		visuals.rotation.y = 0
-		torso_collision.rotation.y = 0
-		head_collision.rotation.y = 0
-		legs_collision.rotation.y = 0
+		for part in playerModel:
+			part.rotation.y = 0
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
-func _input(event):
-	if event is InputEventMouseMotion:
-		if shiftLockEnabled:
-			rotation.y -= deg_to_rad(event.relative.x * sensitivity)
-			rotation.y = wrapf(rotation.y, 0.0, TAU)
-			
-			camera_mount.rotation.x -= deg_to_rad(event.relative.y * sensitivity)
-			camera_mount.rotation.x = clamp(camera_mount.rotation.x, deg_to_rad(-89), deg_to_rad(80))
-			
-		elif Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
-			camera_mount.rotation.y -= deg_to_rad(event.relative.x * sensitivity)
-			camera_mount.rotation.y = wrapf(camera_mount.rotation.y, 0.0, TAU)
-			
-			camera_mount.rotation.x -= deg_to_rad(event.relative.y * sensitivity)
-			camera_mount.rotation.x = clamp(camera_mount.rotation.x, deg_to_rad(-89), deg_to_rad(80))
-			
-	if event is InputEventMouseButton:
-		if event.button_index == 4:
-			camera.position.z = clamp(camera.position.z - 0.5, minCameraZoom, maxCameraZoom)
-			camera_spring_arm.spring_length = clamp(camera_spring_arm.spring_length - 0.5, minCameraZoom, maxCameraZoom)
-		elif event.button_index == 5:
-			camera.position.z = clamp(camera.position.z + 0.5, minCameraZoom, maxCameraZoom)
-			camera_spring_arm.spring_length = clamp(camera_spring_arm.spring_length + 0.5, minCameraZoom, maxCameraZoom)
-
-func _process(_delta):
-	if Input.is_action_just_pressed("shiftLock"):
-		toggleShiftLock()
-
-func _physics_process(delta):
-	if is_on_floor():
-		jumpGraceTimer = JUMP_GRACE_TIME
-	else:
-		velocity.y -= gravity * delta
-		jumpGraceTimer -= delta
-
-	if Input.is_action_pressed("jump") and jumpGraceTimer > 0:
-		jump();
-
-	# calculate direction to move
+		
+func calculateMovementDirection():
 	var direction = Vector3()
 	if shiftLockEnabled:
 		if Input.is_action_pressed("forward"):
@@ -106,15 +65,51 @@ func _physics_process(delta):
 		if Input.is_action_pressed("right"):
 			direction += camera_mount.transform.basis.x
 		direction.y = 0
-	direction = direction.normalized()
+	return direction.normalized()
+
+func _input(event):
+	if event.is_action_pressed("shiftLock"): 
+		toggleShiftLock()
 		
+	if event is InputEventMouseMotion:
+		if shiftLockEnabled:
+			rotation.y -= deg_to_rad(event.relative.x * sensitivity)
+			rotation.y = wrapf(rotation.y, 0.0, TAU)
+			camera_mount.rotation.x -= deg_to_rad(event.relative.y * sensitivity)
+			camera_mount.rotation.x = clamp(camera_mount.rotation.x, deg_to_rad(-89), deg_to_rad(80))
+			
+		elif Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+			camera_mount.rotation.y -= deg_to_rad(event.relative.x * sensitivity)
+			camera_mount.rotation.y = wrapf(camera_mount.rotation.y, 0.0, TAU)
+			camera_mount.rotation.x -= deg_to_rad(event.relative.y * sensitivity)
+			camera_mount.rotation.x = clamp(camera_mount.rotation.x, deg_to_rad(-89), deg_to_rad(80))
+			
+	if event.is_action_pressed("zoomIn"):
+		camera.position.z = clamp(camera.position.z - 0.5, minCameraZoom, maxCameraZoom)
+		camera_spring_arm.spring_length = clamp(camera_spring_arm.spring_length - 0.5, minCameraZoom, maxCameraZoom)
+	if event.is_action_pressed("zoomOut"):
+		camera.position.z = clamp(camera.position.z + 0.5, minCameraZoom, maxCameraZoom)
+		camera_spring_arm.spring_length = clamp(camera_spring_arm.spring_length + 0.5, minCameraZoom, maxCameraZoom)
+
+func _physics_process(delta):
+	if is_on_floor():
+		jumpGraceTimer = JUMP_GRACE_TIME
+	else:
+		velocity.y -= gravity * delta
+		jumpGraceTimer -= delta
+		
+	if Input.is_action_pressed("jump") and jumpGraceTimer > 0: 
+		jump();
+		
+	var direction = calculateMovementDirection();
 	if direction != Vector3.ZERO:
-		if animation_player.current_animation != "walk":
-			animation_player.play("walk")
 		velocity.x = direction.x * speed
 		velocity.z = direction.z * speed
+		if animation_player.current_animation != "walk":
+			animation_player.play("walk")
 		if not shiftLockEnabled:
-			visuals.rotation.y = lerp_angle(visuals.rotation.y, atan2(-direction.x, -direction.z), 0.2);
+			for part in playerModel:
+				part.rotation.y = lerp_angle(part.rotation.y, atan2(-direction.x, -direction.z), 0.15);
 	else:
 		if animation_player.current_animation != "idle":
 			animation_player.play("idle")
