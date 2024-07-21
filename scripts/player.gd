@@ -7,26 +7,32 @@ extends CharacterBody3D
 @onready var camera = $camera_mount/SpringArm3D/Camera3D
 @onready var torso_collision = $torso_collision
 @onready var head_collision = $head_collision
-@onready var legs_collision = $legs_collision
-@onready var playerModel = [visuals, torso_collision, head_collision, legs_collision]
+@onready var wall_check = $visuals/player_model/torso/wall_check
+@onready var still_wall = $visuals/player_model/torso/still_wall
+@onready var playerModel = [visuals, torso_collision, head_collision]
+
+@export var jumpVelocity: float = 14
+@export var sensitivity: float = 0.2
+@export var speed: float = 4.48
+@export var maxCameraZoom: float = 10
+@export var minCameraZoom: float = 1
+
+var jumpGraceTimer: float = 0
+var shiftLockEnabled = false
+var isClimbing = false
+var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 const JUMP_GRACE_TIME = 0.1 #seconds
 
-@export var jumpVelocity = 14
-@export var sensitivity = 0.2
-@export var speed = 4.48
-@export var maxCameraZoom = 10
-@export var minCameraZoom = 1
-
-var jumpGraceTimer = 0
-var shiftLockEnabled = false
-var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-
-func jump():
-	velocity.y = jumpVelocity
-	jumpGraceTimer = 0
+func jump() -> void:
+	if isClimbing:
+		velocity = transform.basis.z
+		velocity.y = jumpVelocity
+	else:
+		velocity.y = jumpVelocity
+		jumpGraceTimer = 0
 	
-func toggleShiftLock():
+func toggleShiftLock() -> void:
 	if shiftLockEnabled:
 		shiftLockEnabled = false
 		camera_mount.position.x = 0
@@ -44,28 +50,76 @@ func toggleShiftLock():
 			part.rotation.y = 0
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		
-func calculateMovementDirection():
+func calculateMovementDirection() -> Vector3:
+	var pressingForward = Input.is_action_pressed("forward")
+	var pressingBackward = Input.is_action_pressed("backward")
+	var pressingLeft = Input.is_action_pressed("left")
+	var pressingRight = Input.is_action_pressed("right")
 	var direction = Vector3()
-	if shiftLockEnabled:
-		if Input.is_action_pressed("forward"):
+	
+	if isClimbing:
+		if pressingForward:
+			direction += Vector3.UP
+		if pressingBackward: 
+			direction += Vector3.DOWN
+		if pressingLeft:
+			direction += Vector3.UP
+		if pressingRight:
+			direction += Vector3.UP
+	elif shiftLockEnabled:
+		if pressingForward:
 			direction -= transform.basis.z
-		elif Input.is_action_pressed("backward"):
+		if pressingBackward:
 			direction += transform.basis.z
-		if Input.is_action_pressed("left"):
+		if pressingLeft:
 			direction -= transform.basis.x
-		if Input.is_action_pressed("right"):
+		if pressingRight:
 			direction += transform.basis.x
 	else:
-		if Input.is_action_pressed("forward"):
+		if pressingForward:
 			direction -= camera_mount.transform.basis.z
-		elif Input.is_action_pressed("backward"):
+		if pressingBackward:
 			direction += camera_mount.transform.basis.z
-		if Input.is_action_pressed("left"):
+		if pressingLeft:
 			direction -= camera_mount.transform.basis.x
-		if Input.is_action_pressed("right"):
+		if pressingRight:
 			direction += camera_mount.transform.basis.x
 		direction.y = 0
 	return direction.normalized()
+	
+func setPlayerAnimation(animation: String) -> void:
+	if animation_player.current_animation != animation:
+		animation_player.play(animation)
+		
+func updateClimbingState() -> void:
+	isClimbing = false
+	if wall_check.is_colliding() && still_wall.is_colliding():
+		isClimbing = true
+	if is_on_floor() && Input.is_action_pressed("backward"):
+		isClimbing = false
+	#isClimbing = wall_check.is_colliding() && still_wall.is_colliding()
+		
+func movePlayer() -> void:
+	var direction = calculateMovementDirection()
+	if isClimbing:
+		velocity.x = 0
+		velocity.z = 0
+		velocity.y = direction.y * speed
+		setPlayerAnimation("climb")
+	elif direction != Vector3.ZERO:
+		velocity.x = direction.x * speed
+		velocity.z = direction.z * speed
+		setPlayerAnimation("walk")
+		if not shiftLockEnabled:
+			for part in playerModel:
+				part.rotation.y = lerp_angle(part.rotation.y, atan2(-direction.x, -direction.z), 0.15)
+	else:
+		setPlayerAnimation("idle")
+		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.z = move_toward(velocity.z, 0, speed)
+
+	move_and_slide()
+	
 
 func _input(event):
 	if event.is_action_pressed("shiftLock"): 
@@ -98,22 +152,10 @@ func _physics_process(delta):
 		velocity.y -= gravity * delta
 		jumpGraceTimer -= delta
 		
-	if Input.is_action_pressed("jump") and jumpGraceTimer > 0: 
-		jump();
-		
-	var direction = calculateMovementDirection();
-	if direction != Vector3.ZERO:
-		velocity.x = direction.x * speed
-		velocity.z = direction.z * speed
-		if animation_player.current_animation != "walk":
-			animation_player.play("walk")
-		if not shiftLockEnabled:
-			for part in playerModel:
-				part.rotation.y = lerp_angle(part.rotation.y, atan2(-direction.x, -direction.z), 0.15);
-	else:
-		if animation_player.current_animation != "idle":
-			animation_player.play("idle")
-		velocity.x = move_toward(velocity.x, 0, speed)
-		velocity.z = move_toward(velocity.z, 0, speed)
+	if Input.is_action_pressed("jump") && (jumpGraceTimer > 0 || isClimbing): 
+		jump()
+	
+	updateClimbingState()
+	movePlayer()
+	
 
-	move_and_slide()

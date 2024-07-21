@@ -61,6 +61,13 @@ use_collision = true
 size = Vector3(3.08, 1, 0.28)
 material = SubResource("StandardMaterial3D_sto8f")
 
+[node name="box6" type="CSGBox3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.43392, 3.97146, -0.819602)
+use_collision = true
+size = Vector3(0.28, 10, 0.28)
+material = SubResource("StandardMaterial3D_sto8f")
+metadata/isTruss = true
+
 [node name="box5" type="CSGBox3D" parent="map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.73335, 1.4, -7.221)
 material_override = ExtResource("2_acbta")
