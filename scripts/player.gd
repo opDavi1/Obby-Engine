@@ -21,6 +21,7 @@ var jumpGraceTimer: float = 0
 var shiftLockEnabled = false
 var isClimbing = false
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+var gravityEnabled = true
 
 const JUMP_GRACE_TIME = 0.1 #seconds
 
@@ -92,27 +93,32 @@ func setPlayerAnimation(animation: String) -> void:
 		animation_player.play(animation)
 		
 func updateClimbingState() -> void:
-	isClimbing = false
 	if wall_check.is_colliding() && still_wall.is_colliding():
 		isClimbing = true
+	else:
+		isClimbing = false
 	if is_on_floor() && Input.is_action_pressed("backward"):
 		isClimbing = false
-	#isClimbing = wall_check.is_colliding() && still_wall.is_colliding()
-		
+	
 func movePlayer() -> void:
 	var direction = calculateMovementDirection()
-	if isClimbing:
-		velocity.x = 0
-		velocity.z = 0
-		velocity.y = direction.y * speed
-		setPlayerAnimation("climb")
-	elif direction != Vector3.ZERO:
-		velocity.x = direction.x * speed
-		velocity.z = direction.z * speed
-		setPlayerAnimation("walk")
+	if direction != Vector3.ZERO:
+		if isClimbing:
+			velocity.x = 0
+			velocity.z = 0
+			velocity.y = direction.y * speed
+			setPlayerAnimation("climb")
+		else:
+			velocity.x = direction.x * speed
+			velocity.z = direction.z * speed
+			setPlayerAnimation("walk")
 		if not shiftLockEnabled:
 			for part in playerModel:
 				part.rotation.y = lerp_angle(part.rotation.y, atan2(-direction.x, -direction.z), 0.15)
+	elif isClimbing:
+		animation_player.pause()
+		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.z = move_toward(velocity.z, 0, speed)
 	else:
 		setPlayerAnimation("idle")
 		velocity.x = move_toward(velocity.x, 0, speed)
@@ -148,7 +154,7 @@ func _input(event):
 func _physics_process(delta):
 	if is_on_floor():
 		jumpGraceTimer = JUMP_GRACE_TIME
-	else:
+	elif gravityEnabled:
 		velocity.y -= gravity * delta
 		jumpGraceTimer -= delta
 		

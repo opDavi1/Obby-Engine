@@ -1,1 +1,1 @@
-A free and open source clone of Roblox.
+A free, open source clone of Roblox.
