@@ -1,8 +1,5 @@
 # This script is a part of opDavi1's Definitive Obby Engine (ODOE) which is licensed under the GNU GPL-3.0-or-later license
 
-# TODO: add raycasts to player to detect <2 stud thick ledges and trusses for climbing
-# TODO: update update_climbing_state()
-
 extends CharacterBody3D;
 
 enum PLAYER_STATE_TYPE {
@@ -43,7 +40,6 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity"); 
 var gravityEnabled := true;
 var player_state := PLAYER_STATE_TYPE.IDLE;
 
-
 func jump() -> void:
 	if player_state == PLAYER_STATE_TYPE.JUMPING:
 		return;
@@ -54,6 +50,14 @@ func jump() -> void:
 	else:
 		velocity.y = jumpVelocity;
 		jumpGraceTimer = 0;
+
+
+func apply_gravity(dt) -> void:
+	if is_on_floor():
+		jumpGraceTimer = 0.1; # seconds
+	elif gravityEnabled:
+		velocity.y -= gravity * dt;
+		jumpGraceTimer -= dt;
 
 
 func toggle_shift_lock() -> void:
@@ -118,27 +122,39 @@ func set_player_animation(animation: String) -> void:
 		animation_player.play(animation);
 
 
+func create_rays_for_climbing_detection() -> void:
+	for i in range(25):
+		var ray = RayCast3D.new();
+		climb_detection.get_child(1).add_child(ray);
+		ray.target_position.y = 0;
+		ray.target_position.z = -0.28;
+		ray.position.z = -0.13;
+		ray.position.y = lerp(-0.75, -0.1, i/25.0);
+
+
 func update_climbing_state() -> void:
-	if part_detector.has_overlapping_bodies():
+	if not part_detector.has_overlapping_bodies():
+		player_state = PLAYER_STATE_TYPE.IDLE;
+	else:
 		var rays = climb_detection.get_child(1).get_children();
 		var num_colliding_rays = 0;
+		var is_truss = false;
 		for ray in rays:
+			var obj = ray.get_collider()
+			if obj && obj.metadata.is_truss:
+				is_truss = true;
+				break;
 			if ray.is_colliding():
 				num_colliding_rays += 1;
 				
-		if num_colliding_rays <= 15 && num_colliding_rays > 0:
+		if num_colliding_rays <= 15 && num_colliding_rays > 0 || is_truss:
 			player_state = PLAYER_STATE_TYPE.CLIMBING;
 		else:
 			player_state = PLAYER_STATE_TYPE.IDLE;
-	else:
-		player_state = PLAYER_STATE_TYPE.IDLE;
-		
 
 	if is_on_floor() && Input.is_action_pressed("backward"):
 		isClimbing = false;
 
-func set_player_state(new_state: PLAYER_STATE_TYPE) -> void:
-	player_state = new_state;
 
 func move_player(direction: Vector3) -> void:
 	if direction == Vector3.ZERO:
@@ -167,6 +183,7 @@ func move_player(direction: Vector3) -> void:
 				velocity.y = direction.y * speed;
 				set_player_animation("climb");
 
+
 func move_camera(event: InputEventMouseMotion) -> void:
 	if shiftLockEnabled:
 		rotation.y -= deg_to_rad(event.relative.x * sensitivity);
@@ -179,15 +196,10 @@ func move_camera(event: InputEventMouseMotion) -> void:
 		camera_mount.rotation.x -= deg_to_rad(event.relative.y * sensitivity);
 		camera_mount.rotation.x = clamp(camera_mount.rotation.x, deg_to_rad(-89), deg_to_rad(80));
 
+
 func _ready():
-	#create rays for climbing detection
-	for i in range(25):
-		var ray = RayCast3D.new();
-		climb_detection.get_child(1).add_child(ray);
-		ray.target_position.y = 0;
-		ray.target_position.z = -0.28;
-		ray.position.z = -0.15;
-		ray.position.y = lerp(-0.75, -0.1, i/25.0);
+	create_rays_for_climbing_detection();
+
 
 func _input(event):
 	if event.is_action_pressed("shiftLock"): 
@@ -204,17 +216,13 @@ func _input(event):
 		camera_spring_arm.spring_length = clamp(camera_spring_arm.spring_length + 0.5, minCameraZoom, maxCameraZoom);
 
 
-func _physics_process(delta):
-	if is_on_floor():
-		jumpGraceTimer = 0.1; # seconds
-	elif gravityEnabled:
-		velocity.y -= gravity * delta;
-		jumpGraceTimer -= delta;
-		
+func _physics_process(dt):
 	if Input.is_action_pressed("jump") && (jumpGraceTimer > 0 || isClimbing): 
 		jump();
-	
+		
+	apply_gravity(dt);
 	update_climbing_state();
-	move_player(calculate_movement_direction());
+	var movement_direction = calculate_movement_direction();
+	move_player(movement_direction);
 	move_and_slide();
 	
