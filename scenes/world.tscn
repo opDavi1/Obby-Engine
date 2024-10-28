@@ -62,14 +62,49 @@ size = Vector3(3.08, 1, 0.28)
 material = SubResource("StandardMaterial3D_sto8f")
 
 [node name="box6" type="CSGBox3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.61362, -0.368239, -7.221)
+material_override = ExtResource("2_acbta")
+use_collision = true
+size = Vector3(3.08, 0.28, 0.28)
+material = SubResource("StandardMaterial3D_sto8f")
+
+[node name="box7" type="CSGBox3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.61362, 0.159346, -7.221)
+material_override = ExtResource("2_acbta")
+use_collision = true
+size = Vector3(3.08, 0.28, 0.28)
+material = SubResource("StandardMaterial3D_sto8f")
+
+[node name="box8" type="CSGBox3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.61362, 0.71446, -7.221)
+material_override = ExtResource("2_acbta")
+use_collision = true
+size = Vector3(3.08, 0.28, 0.28)
+material = SubResource("StandardMaterial3D_sto8f")
+
+[node name="box9" type="CSGBox3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.61362, 1.29277, -7.221)
+material_override = ExtResource("2_acbta")
+use_collision = true
+size = Vector3(3.08, 0.28, 0.28)
+material = SubResource("StandardMaterial3D_sto8f")
+
+[node name="box10" type="CSGBox3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.61362, 1.87557, -7.221)
+material_override = ExtResource("2_acbta")
+use_collision = true
+size = Vector3(3.08, 0.28, 0.28)
+material = SubResource("StandardMaterial3D_sto8f")
+
+[node name="truss" type="CSGBox3D" parent="map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.43392, 3.97146, -0.819602)
 use_collision = true
 size = Vector3(0.28, 10, 0.28)
 material = SubResource("StandardMaterial3D_sto8f")
-metadata/isTruss = true
+metadata/is_truss = true
 
 [node name="box5" type="CSGBox3D" parent="map"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.73335, 1.4, -7.221)
+transform = Transform3D(0.9995, -0.0303186, 0.00897757, 0.030498, 0.999323, -0.0205744, -0.0083477, 0.0208379, 0.999748, 1.73335, 1.4, -7.221)
 material_override = ExtResource("2_acbta")
 use_collision = true
 size = Vector3(3.08, 1, 0.28)
@@ -81,4 +116,4 @@ use_collision = true
 material = SubResource("StandardMaterial3D_ia8vu")
 
 [node name="player" parent="." instance=ExtResource("3_oa0ld")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.42553, 2.81801, -3.63899)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12367, 1.25391, 1.61636)
