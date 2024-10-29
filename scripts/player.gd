@@ -25,6 +25,7 @@ enum PLAYER_STATE_TYPE {
 @onready var torso_collision = $torso_collision;
 @onready var head_collision = $head_collision;
 @onready var climb_detection = $climb_detection;
+@onready var climb_detection_rays: Node3D = $climb_detection/rays
 @onready var part_detector = $climb_detection/part_detector;
 @onready var playerModel = [visuals, torso_collision, head_collision, climb_detection];
 
@@ -125,7 +126,7 @@ func set_player_animation(animation: String) -> void:
 func create_rays_for_climbing_detection() -> void:
 	for i in range(25):
 		var ray = RayCast3D.new();
-		climb_detection.get_child(1).add_child(ray);
+		climb_detection_rays.add_child(ray);
 		ray.target_position.y = 0;
 		ray.target_position.z = -0.28;
 		ray.position.z = -0.13;
@@ -133,21 +134,32 @@ func create_rays_for_climbing_detection() -> void:
 
 
 func update_climbing_state() -> void:
+	var rays = climb_detection_rays.get_children();
 	if not part_detector.has_overlapping_bodies():
 		player_state = PLAYER_STATE_TYPE.IDLE;
-	else:
-		var rays = climb_detection.get_child(1).get_children();
-		var num_colliding_rays = 0;
-		var is_truss = false;
 		for ray in rays:
-			var obj = ray.get_collider()
+			ray.enabled = false;
+	else:
+		var climbable = false;
+		var is_truss = false;
+		var num_colliding_rays = 0;
+		for i in range(rays.size() - 1):
+			var ray = rays[i];
+			var obj = ray.get_collider();
+			ray.enabled = true;
+
 			if obj && obj.get_meta("is_truss", false):
 				is_truss = true;
 				break;
+			
 			if ray.is_colliding():
 				num_colliding_rays += 1;
+			elif i > 0 && rays[i-1].is_colliding():
+				print(ray.position.y)
+				print(rays[i-1].position.y);
+				climbable = true;
 				
-		if num_colliding_rays <= 15 && num_colliding_rays > 0 || is_truss:
+		if num_colliding_rays <= 15 && num_colliding_rays > 0 && climbable || is_truss:
 			player_state = PLAYER_STATE_TYPE.CLIMBING;
 		else:
 			player_state = PLAYER_STATE_TYPE.IDLE;
