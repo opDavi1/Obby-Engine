@@ -141,7 +141,7 @@ func update_climbing_state() -> void:
 		var is_truss = false;
 		for ray in rays:
 			var obj = ray.get_collider()
-			if obj && obj.metadata.is_truss:
+			if obj && obj.get_meta("is_truss", false):
 				is_truss = true;
 				break;
 			if ray.is_colliding():
@@ -217,7 +217,7 @@ func _input(event):
 
 
 func _physics_process(dt):
-	if Input.is_action_pressed("jump") && (jumpGraceTimer > 0 || isClimbing): 
+	if Input.is_action_pressed("jump") && (jumpGraceTimer > 0 || player_state == PLAYER_STATE_TYPE.CLIMBING): 
 		jump();
 		
 	apply_gravity(dt);
