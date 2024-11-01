@@ -3,4 +3,4 @@ A free and open source clone of Roblox built in the Godot engine. Licensed under
 
 ---
 
-Currently under heavy development and very work in progress. Feel free to make a PR if you want
+Currently under heavy development and very work in progress. Feel free to make an issue or a PR if you want
