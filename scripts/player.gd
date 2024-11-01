@@ -25,7 +25,7 @@ enum PLAYER_STATE_TYPE {
 @onready var torso_collision = $torso_collision;
 @onready var head_collision = $head_collision;
 @onready var climb_detection = $climb_detection;
-@onready var climb_detection_rays: Node3D = $climb_detection/rays
+@onready var climb_detection_rays: Node3D = $climb_detection/rays;
 @onready var part_detector = $climb_detection/part_detector;
 @onready var playerModel = [visuals, torso_collision, head_collision, climb_detection];
 
@@ -130,7 +130,7 @@ func create_rays_for_climbing_detection() -> void:
 		ray.target_position.y = 0;
 		ray.target_position.z = -0.28;
 		ray.position.z = -0.13;
-		ray.position.y = lerp(-0.75, -0.1, i/25.0);
+		ray.position.y = lerp(-0.8, -0.15, i/25.0);
 
 
 func update_climbing_state() -> void:
@@ -140,13 +140,14 @@ func update_climbing_state() -> void:
 		for ray in rays:
 			ray.enabled = false;
 	else:
-		var climbable = false;
-		var is_truss = false;
+		var gap_above := false;
+		var gap_below := false;
+		var is_truss := false;
 		var num_colliding_rays = 0;
 		for i in range(rays.size() - 1):
 			var ray = rays[i];
-			var obj = ray.get_collider();
 			ray.enabled = true;
+			var obj = ray.get_collider();
 
 			if obj && obj.get_meta("is_truss", false):
 				is_truss = true;
@@ -155,11 +156,11 @@ func update_climbing_state() -> void:
 			if ray.is_colliding():
 				num_colliding_rays += 1;
 			elif i > 0 && rays[i-1].is_colliding():
-				print(ray.position.y)
-				print(rays[i-1].position.y);
-				climbable = true;
+				gap_above = true;
+			elif i < rays.size() && rays[i+1].is_colliding():
+				gap_below = true;
 				
-		if num_colliding_rays <= 15 && num_colliding_rays > 0 && climbable || is_truss:
+		if num_colliding_rays <= 15 && num_colliding_rays > 0 && gap_above && gap_below || is_truss:
 			player_state = PLAYER_STATE_TYPE.CLIMBING;
 		else:
 			player_state = PLAYER_STATE_TYPE.IDLE;
