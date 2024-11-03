@@ -15,9 +15,14 @@ config/description="Open source clone of Roblox for obbying"
 config/version="v0.0.1"
 run/main_scene="res://scenes/world.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
-run/max_fps=500
+run/max_fps=144
 boot_splash/show_image=false
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 
 [dotnet]
 
