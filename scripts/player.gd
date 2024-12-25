@@ -17,6 +17,7 @@ enum PLAYER_STATE_TYPE {
 	NONE,
 }
 
+# Player nodes
 @onready var camera_mount = $camera_mount;
 @onready var visuals = $visuals;
 @onready var animation_player = $AnimationPlayer;
@@ -25,78 +26,106 @@ enum PLAYER_STATE_TYPE {
 @onready var torso_collision = $torso_collision;
 @onready var head_collision = $head_collision;
 @onready var climb_detection = $climb_detection;
-@onready var climb_detection_rays: Node3D = $climb_detection/rays;
+@onready var climb_detection_ray_node: Node3D = $climb_detection/rays
 @onready var part_detector = $climb_detection/part_detector;
-@onready var playerModel = [visuals, torso_collision, head_collision, climb_detection];
+@onready var player_model = [visuals, torso_collision, head_collision, climb_detection];
+var climb_detection_rays = [];
 
-@export var jumpVelocity := 14.0;
+# Private vars
+var _current_state:= PLAYER_STATE_TYPE.IDLE;
+var _previous_state := PLAYER_STATE_TYPE.NONE;
+
+# Public vars
+@export var jump_velocity := 14.0;
 @export var sensitivity := 0.2;
 @export var speed := 4.48;
-@export var maxCameraZoom := 10.0;
-@export var minCameraZoom := 1.0;
-var jumpGraceTimer := 0.0;
-var shiftLockEnabled := false;
-var isClimbing := false;
+@export var max_camera_zoom := 10.0;
+@export var min_camera_zoom := 1.0;
+var jump_grace_timer := 0.0; # seconds
+var shiftlock_enabled := false;
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity"); # 54.936 m/s/s
-var gravityEnabled := true;
-var player_state := PLAYER_STATE_TYPE.IDLE;
+var gravity_enabled := true;
+var movement_enabled := true;
+
+
+func get_state() -> PLAYER_STATE_TYPE:
+	return _current_state;
+
+
+# If code needs to run when a certain state changes, add it here
+func set_state(new_state: PLAYER_STATE_TYPE) -> void:
+	_previous_state = _current_state;
+	_current_state = new_state;
+	if new_state == PLAYER_STATE_TYPE.PLATFORM_STANDING:
+		gravity_enabled = false;
+		movement_enabled = false;
+		velocity = Vector3.ZERO;
+
+	if _previous_state == PLAYER_STATE_TYPE.PLATFORM_STANDING:
+		gravity_enabled = true;
+		movement_enabled = true;
+
+
+func get_previous_state() -> PLAYER_STATE_TYPE:
+	return _previous_state;
+
 
 func jump() -> void:
-	if player_state == PLAYER_STATE_TYPE.JUMPING:
+	if get_state() == PLAYER_STATE_TYPE.JUMPING:
 		return;
 	
-	if player_state == PLAYER_STATE_TYPE.CLIMBING:
+	if get_state() == PLAYER_STATE_TYPE.CLIMBING:
 		velocity = transform.basis.z;
-		velocity.y = jumpVelocity / 2;
+		velocity.y = jump_velocity / 2;
 	else:
-		velocity.y = jumpVelocity;
-		jumpGraceTimer = 0;
+		velocity.y = jump_velocity;
+		jump_grace_timer = 0;
 
 
 func apply_gravity(dt) -> void:
 	if is_on_floor():
-		jumpGraceTimer = 0.1; # seconds
-	elif gravityEnabled:
+		return;
+
+	if gravity_enabled:
 		velocity.y -= gravity * dt;
-		jumpGraceTimer -= dt;
+		jump_grace_timer -= dt;
 
 
 func toggle_shift_lock() -> void:
-	if shiftLockEnabled:
-		shiftLockEnabled = false;
+	if shiftlock_enabled:
+		shiftlock_enabled = false;
 		camera_mount.position.x = 0;
 		camera_mount.rotation.y = rotation.y;
-		for part in playerModel:
+		for part in player_model:
 			part.rotation.y = rotation.y;
 		rotation.y = 0;
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE;
 	else:
-		shiftLockEnabled = true;
+		shiftlock_enabled = true;
 		camera_mount.position.x = 0.43;
 		rotation.y = camera_mount.rotation.y;
 		camera_mount.rotation.y = 0;
-		for part in playerModel:
+		for part in player_model:
 			part.rotation.y = 0;
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED;
 
 
 func calculate_movement_direction() -> Vector3:
+	if not movement_enabled:
+		return Vector3.ZERO;
+
 	var pressingForward = Input.is_action_pressed("forward");
 	var pressingBackward = Input.is_action_pressed("backward");
 	var pressingLeft = Input.is_action_pressed("left");
 	var pressingRight = Input.is_action_pressed("right");
 	var direction = Vector3();
 	
-	if player_state == PLAYER_STATE_TYPE.CLIMBING:
-		if pressingForward:
+	if get_state() == PLAYER_STATE_TYPE.CLIMBING:
+		if pressingForward || pressingLeft || pressingRight:
 			direction += Vector3.UP;
 		if pressingBackward: 
 			direction += Vector3.DOWN;
-		if pressingLeft:
-			direction += Vector3.UP;
-		if pressingRight:
-			direction += Vector3.UP;
-	elif shiftLockEnabled:
+	elif shiftlock_enabled:
 		if pressingForward:
 			direction -= transform.basis.z;
 		if pressingBackward:
@@ -105,7 +134,7 @@ func calculate_movement_direction() -> Vector3:
 			direction -= transform.basis.x;
 		if pressingRight:
 			direction += transform.basis.x;
-	else:
+	else: # Walking normally
 		if pressingForward:
 			direction -= camera_mount.transform.basis.z;
 		if pressingBackward:
@@ -114,7 +143,7 @@ func calculate_movement_direction() -> Vector3:
 			direction -= camera_mount.transform.basis.x;
 		if pressingRight:
 			direction += camera_mount.transform.basis.x;
-		direction.y = 0;
+
 	return direction.normalized();
 
 
@@ -126,7 +155,8 @@ func set_player_animation(animation: String) -> void:
 func create_rays_for_climbing_detection() -> void:
 	for i in range(25):
 		var ray = RayCast3D.new();
-		climb_detection_rays.add_child(ray);
+		climb_detection_ray_node.add_child(ray);
+		climb_detection_rays.append(ray);
 		ray.target_position.y = 0;
 		ray.target_position.z = -0.28;
 		ray.position.z = -0.13;
@@ -134,18 +164,17 @@ func create_rays_for_climbing_detection() -> void:
 
 
 func update_climbing_state() -> void:
-	var rays = climb_detection_rays.get_children();
 	if not part_detector.has_overlapping_bodies():
-		player_state = PLAYER_STATE_TYPE.IDLE;
-		for ray in rays:
+		set_state(PLAYER_STATE_TYPE.IDLE);
+		for ray in climb_detection_rays:
 			ray.enabled = false;
 	else:
 		var gap_above := false;
 		var gap_below := false;
 		var is_truss := false;
 		var num_colliding_rays = 0;
-		for i in range(rays.size() - 1):
-			var ray = rays[i];
+		for i in range(climb_detection_rays.size() - 1):
+			var ray = climb_detection_rays[i];
 			ray.enabled = true;
 			var obj = ray.get_collider();
 
@@ -155,21 +184,22 @@ func update_climbing_state() -> void:
 			
 			if ray.is_colliding():
 				num_colliding_rays += 1;
-			elif i > 0 && rays[i-1].is_colliding():
+			elif i > 0 && climb_detection_rays[i-1].is_colliding():
 				gap_above = true;
-			elif i < rays.size() && rays[i+1].is_colliding():
+			elif i < climb_detection_rays.size() && climb_detection_rays[i+1].is_colliding():
 				gap_below = true;
 				
 		if num_colliding_rays <= 15 && num_colliding_rays > 0 && gap_above && gap_below || is_truss:
-			player_state = PLAYER_STATE_TYPE.CLIMBING;
+			set_state(PLAYER_STATE_TYPE.CLIMBING);
 		else:
-			player_state = PLAYER_STATE_TYPE.IDLE;
+			set_state(PLAYER_STATE_TYPE.IDLE);
 
 	if is_on_floor() && Input.is_action_pressed("backward"):
-		isClimbing = false;
+		set_state(PLAYER_STATE_TYPE.IDLE);
 
 
 func move_player(direction: Vector3) -> void:
+	var player_state = get_state();
 	if direction == Vector3.ZERO:
 		match player_state:
 			PLAYER_STATE_TYPE.IDLE, PLAYER_STATE_TYPE.RUNNING:
@@ -182,8 +212,8 @@ func move_player(direction: Vector3) -> void:
 				velocity.y = direction.y * speed;
 				set_player_animation("climb");
 	else:
-		if not shiftLockEnabled && player_state != PLAYER_STATE_TYPE.CLIMBING:
-			for part in playerModel:
+		if not shiftlock_enabled && player_state != PLAYER_STATE_TYPE.CLIMBING:
+			for part in player_model:
 				part.rotation.y = lerp_angle(part.rotation.y, atan2(-direction.x, -direction.z), 0.15);
 		match player_state:
 			PLAYER_STATE_TYPE.IDLE, PLAYER_STATE_TYPE.RUNNING:
@@ -198,7 +228,7 @@ func move_player(direction: Vector3) -> void:
 
 
 func move_camera(event: InputEventMouseMotion) -> void:
-	if shiftLockEnabled:
+	if shiftlock_enabled:
 		rotation.y -= deg_to_rad(event.relative.x * sensitivity);
 		rotation.y = wrapf(rotation.y, 0.0, TAU);
 		camera_mount.rotation.x -= deg_to_rad(event.relative.y * sensitivity);
@@ -222,20 +252,22 @@ func _input(event):
 		move_camera(event);
 		
 	if event.is_action_pressed("zoomIn"):
-		camera.position.z = clamp(camera.position.z - 0.5, minCameraZoom, maxCameraZoom);
-		camera_spring_arm.spring_length = clamp(camera_spring_arm.spring_length - 0.5, minCameraZoom, maxCameraZoom);
+		camera.position.z = clamp(camera.position.z - 0.5, min_camera_zoom, max_camera_zoom);
+		camera_spring_arm.spring_length = clamp(camera_spring_arm.spring_length - 0.5, min_camera_zoom, max_camera_zoom);
 	if event.is_action_pressed("zoomOut"):
-		camera.position.z = clamp(camera.position.z + 0.5, minCameraZoom, maxCameraZoom);
-		camera_spring_arm.spring_length = clamp(camera_spring_arm.spring_length + 0.5, minCameraZoom, maxCameraZoom);
+		camera.position.z = clamp(camera.position.z + 0.5, min_camera_zoom, max_camera_zoom);
+		camera_spring_arm.spring_length = clamp(camera_spring_arm.spring_length + 0.5, min_camera_zoom, max_camera_zoom);
 
 
 func _physics_process(dt):
-	if Input.is_action_pressed("jump") && (jumpGraceTimer > 0 || player_state == PLAYER_STATE_TYPE.CLIMBING): 
+	if Input.is_action_pressed("jump") && (jump_grace_timer > 0 || get_state() == PLAYER_STATE_TYPE.CLIMBING): 
 		jump();
+
+	if is_on_floor():
+		jump_grace_timer = 0.1;
 		
 	apply_gravity(dt);
-	update_climbing_state();
 	var movement_direction = calculate_movement_direction();
 	move_player(movement_direction);
 	move_and_slide();
-	
+	update_climbing_state();
