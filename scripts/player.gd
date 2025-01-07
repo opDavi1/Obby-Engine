@@ -143,7 +143,8 @@ func calculate_movement_direction() -> Vector3:
 			direction -= camera_mount.transform.basis.x;
 		if pressingRight:
 			direction += camera_mount.transform.basis.x;
-
+		direction.y = 0;
+		
 	return direction.normalized();
 
 
@@ -198,8 +199,11 @@ func update_climbing_state() -> void:
 		set_state(PLAYER_STATE_TYPE.IDLE);
 
 
-func move_player(direction: Vector3) -> void:
+func move_player() -> void:
 	var player_state = get_state();
+	var direction = calculate_movement_direction();
+	
+
 	if direction == Vector3.ZERO:
 		match player_state:
 			PLAYER_STATE_TYPE.IDLE, PLAYER_STATE_TYPE.RUNNING:
@@ -267,7 +271,6 @@ func _physics_process(dt):
 		jump_grace_timer = 0.1;
 		
 	apply_gravity(dt);
-	var movement_direction = calculate_movement_direction();
-	move_player(movement_direction);
+	move_player();
 	move_and_slide();
 	update_climbing_state();
