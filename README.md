@@ -1,5 +1,6 @@
 # Obby Engine
-A free and open source clone of Roblox built in the Godot engine. Licensed under the GNU GPL-3.0-or-later license. See the included LICENSE file for more information
+A free and open source clone of Roblox built in the Godot engine. Licensed under the GNU GPL-3.0-or-later license. See the included LICENSE file for more information.
+The player assets are taken from Roblox Studio, I'm not sure about the legalities of this.
 
 ---
 
