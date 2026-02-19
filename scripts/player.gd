@@ -171,7 +171,6 @@ func update_climbing_state() -> void:
 			ray.enabled = false;
 	else:
 		var gap_above := false;
-		var gap_below := false;
 		var is_truss := false;
 		var num_colliding_rays = 0;
 		for i in range(climb_detection_rays.size() - 1):
@@ -187,10 +186,8 @@ func update_climbing_state() -> void:
 				num_colliding_rays += 1;
 			elif i > 0 && climb_detection_rays[i-1].is_colliding():
 				gap_above = true;
-			elif i < climb_detection_rays.size() && climb_detection_rays[i+1].is_colliding():
-				gap_below = true;
 				
-		if num_colliding_rays <= 15 && num_colliding_rays > 0 && gap_above && gap_below || is_truss:
+		if num_colliding_rays <= 15 && num_colliding_rays > 0 && gap_above || is_truss:
 			set_state(PLAYER_STATE_TYPE.CLIMBING);
 		else:
 			set_state(PLAYER_STATE_TYPE.IDLE);
